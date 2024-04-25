@@ -6,3 +6,8 @@ sky:
     database: sky_take_out
     username: root
     password: 1234
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: "YOUR_ACCESS_KEY_ID" # 替换为实际的AccessKeyId
+    access-key-secret: "YOUR_ACCESS_KEY_SECRET" # 替换为实际的AccessKeySecret
+    bucket-name: sky-ahut
