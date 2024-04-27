@@ -40,6 +40,7 @@ public interface DishMapper {
 
     /**
      * 菜品分页查询
+     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -47,14 +48,24 @@ public interface DishMapper {
 
     /**
      * 根据菜品id数组查询菜品
+     *
      * @param ids
      * @return
      */
-    List<Dish> selectByIds(List<String> ids);
+    List<Dish> getByIds(List<String> ids);
 
     /**
      * 根据菜品id数组批量删除菜品
+     *
      * @param ids
      */
     void deleteByIds(List<String> ids);
+
+    /**
+     * 根据id动态修改菜品
+     *
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }
