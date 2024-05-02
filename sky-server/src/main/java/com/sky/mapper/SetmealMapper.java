@@ -44,11 +44,11 @@ public interface SetmealMapper {
      * @param ids
      * @return
      */
-    List<Setmeal> getByIds(List<String> ids);
+    List<Setmeal> getByIds(List<Long> ids);
 
     /**
      * 根据套餐id数组批量删除套餐
      * @param ids
      */
-    void deleteByIds(List<String> ids);
+    void deleteByIds(List<Long> ids);
 }

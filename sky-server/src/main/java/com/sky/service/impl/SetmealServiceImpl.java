@@ -72,7 +72,7 @@ public class SetmealServiceImpl implements SetmealService {
      *
      * @param ids
      */
-    public void deleteBatch(List<String> ids) {
+    public void deleteBatch(List<Long> ids) {
         //判断当前套餐是否能够删除
         List<Setmeal> setmealList = setmealMapper.getByIds(ids);
         setmealList.forEach(setmeal -> {
