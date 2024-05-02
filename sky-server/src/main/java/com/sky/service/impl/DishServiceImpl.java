@@ -85,7 +85,7 @@ public class DishServiceImpl implements DishService {
      * @param ids
      */
     @Transactional
-    public void deleteBatch(List<String> ids) {
+    public void deleteBatch(List<Long> ids) {
         //判断当前菜品是否能够删除---是否存在起售中的菜品??
         List<Dish> dishList = dishMapper.getByIds(ids);
         dishList.forEach(dish -> {
@@ -117,7 +117,7 @@ public class DishServiceImpl implements DishService {
      */
     public DishVO getByIdWithFlavor(Long id) {
         //根据id查询菜品数据
-        List<String> idList = Collections.singletonList(String.valueOf(id));
+        List<Long> idList = Collections.singletonList(id);
         List<Dish> dishList = dishMapper.getByIds(idList);
         Dish dish = dishList.get(0);
 
@@ -146,7 +146,7 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
 
         //删除原有的口味数据
-        List<String> idList = Collections.singletonList(String.valueOf(dishDTO.getId()));
+        List<Long> idList = Collections.singletonList(dishDTO.getId());
         dishFlavorMapper.deleteByDishIds(idList);
 
         //重新插入口味数据

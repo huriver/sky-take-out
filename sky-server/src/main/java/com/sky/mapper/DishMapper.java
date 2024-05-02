@@ -52,14 +52,14 @@ public interface DishMapper {
      * @param ids
      * @return
      */
-    List<Dish> getByIds(List<String> ids);
+    List<Dish> getByIds(List<Long> ids);
 
     /**
      * 根据菜品id数组批量删除菜品
      *
      * @param ids
      */
-    void deleteByIds(List<String> ids);
+    void deleteByIds(List<Long> ids);
 
     /**
      * 根据id动态修改菜品
