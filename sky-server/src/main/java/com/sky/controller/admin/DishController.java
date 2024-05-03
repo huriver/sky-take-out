@@ -95,6 +95,21 @@ public class DishController {
     }
 
     /**
+     * 菜品起售停售
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品起售停售")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("菜品起售停售:{},{}", status, id);
+        dishService.startOrStop(status, id);
+        return Result.success();
+    }
+
+    /**
      * 根据分类id查询菜品
      *
      * @param categoryId
