@@ -11,3 +11,8 @@ sky:
     access-key-id: "YOUR_ACCESS_KEY_ID" # 替换为实际的AccessKeyId
     access-key-secret: "YOUR_ACCESS_KEY_SECRET" # 替换为实际的AccessKeySecret
     bucket-name: sky-ahut
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 10
