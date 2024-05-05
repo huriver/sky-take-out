@@ -16,3 +16,6 @@ sky:
     port: 6379
     password: 123456
     database: 10
+  wechat:
+    appid: YOUR_APPID # 替换为实际的APPID
+    secret: YOUR_SECRET # 替换为实际的SECRET
