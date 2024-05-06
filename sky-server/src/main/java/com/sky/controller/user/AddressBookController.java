@@ -95,7 +95,7 @@ public class AddressBookController {
     /**
      * 查询默认地址
      */
-    @GetMapping("default")
+    @GetMapping("/default")
     @ApiOperation("查询默认地址")
     public Result<AddressBook> getDefault() {
         //SQL:select * from address_book where user_id = ? and is_default = 1
