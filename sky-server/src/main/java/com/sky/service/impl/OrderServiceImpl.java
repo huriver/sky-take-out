@@ -1,19 +1,19 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
-import com.sky.entity.AddressBook;
-import com.sky.entity.OrderDetail;
-import com.sky.entity.Orders;
-import com.sky.entity.ShoppingCart;
+import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
-import com.sky.mapper.AddressBookMapper;
-import com.sky.mapper.OrderDetailMapper;
-import com.sky.mapper.OrderMapper;
-import com.sky.mapper.ShoppingCartMapper;
+import com.sky.mapper.*;
 import com.sky.service.OrderService;
+import com.sky.utils.WeChatPayUtil;
+import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -39,6 +37,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private WeChatPayUtil weChatPayUtil;
 
     /**
      * 用户下单
@@ -76,6 +80,11 @@ public class OrderServiceImpl implements OrderService {
         orders.setPhone(addressBook.getPhone());
         orders.setConsignee(addressBook.getConsignee());
         orders.setUserId(userId);
+        //自己补充添加值的字段
+        String address = addressBook.getProvinceName() + addressBook.getCityName() +
+                addressBook.getDistrictName() + addressBook.getDetail();
+        orders.setAddress(address);
+
         orderMapper.insert(orders);
 
         //向订单明细表插入n条数据
@@ -102,5 +111,59 @@ public class OrderServiceImpl implements OrderService {
         return orderSubmitVO;
     }
 
+    /**
+     * 订单支付
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+        // 当前登录用户id
+        Long userId = BaseContext.getCurrentId();
+        User user = userMapper.getById(userId);
+
+        //调用微信支付接口，生成预支付交易单
+        // 注释掉微信支付核心代码
+//        JSONObject jsonObject = weChatPayUtil.pay(
+//                ordersPaymentDTO.getOrderNumber(), //商户订单号
+//                new BigDecimal(0.01), //支付金额，单位 元
+//                "快享餐点订单", //商品描述
+//                user.getOpenid() //微信用户的openid
+//        );
+//
+//        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
+//            throw new OrderBusinessException("该订单已支付");
+//        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", "ORDERPAID");
+
+        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+        vo.setPackageStr(jsonObject.getString("package"));
+
+        //业务处理，修改订单状态、来单提醒
+        paySuccess(ordersPaymentDTO.getOrderNumber());
+
+        return vo;
+    }
+
+    /**
+     * 支付成功，修改订单状态
+     *
+     * @param outTradeNo
+     */
+    public void paySuccess(String outTradeNo) {
+        // 根据订单号查询订单
+        Orders ordersDB = orderMapper.getByNumber(outTradeNo);
+
+        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.update(orders);
+    }
 
 }
