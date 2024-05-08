@@ -63,3 +63,7 @@ sky:
     weChatPayCertFilePath: ${sky.wechat.weChatPayCertFilePath}
     notifyUrl: ${sky.wechat.notifyUrl}
     refundNotifyUrl: ${sky.wechat.refundNotifyUrl}
+  shop:
+    address: 安徽省马鞍山市雨山区佳山乡达观天下6-102
+  baidu:
+    ak: YOUR_AK # 替换为实际的AK
