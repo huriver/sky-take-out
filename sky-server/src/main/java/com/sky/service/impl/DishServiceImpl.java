@@ -199,17 +199,17 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 根据分类id查询菜品
+     * 根据分类id或名称查询菜品
      *
-     * @param categoryId
+     * @param dishDTO
      * @return
      */
-    public List<Dish> list(Long categoryId) {
+    public List<Dish> list(DishDTO dishDTO) {
         Dish dish = Dish.builder()
-                .categoryId(categoryId)
+                .name(dishDTO.getName())
+                .categoryId(dishDTO.getCategoryId())
                 .status(StatusConstant.ENABLE)
                 .build();
-
         List<Dish> dishList = dishMapper.list(dish);
         return dishList;
     }

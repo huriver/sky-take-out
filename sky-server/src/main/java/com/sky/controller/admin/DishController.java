@@ -128,16 +128,20 @@ public class DishController {
     }
 
     /**
-     * 根据分类id查询菜品
+     * 根据分类id或名称查询菜品
      *
-     * @param categoryId
+     * @param dishDTO
      * @return
      */
     @GetMapping("/list")
-    @ApiOperation("根据分类id查询菜品")
-    public Result<List<Dish>> list(Long categoryId) {
-        log.info("根据分类id查询菜品:{}", categoryId);
-        List<Dish> dishList = dishService.list(categoryId);
+    @ApiOperation("根据分类id或名称查询菜品")
+    public Result<List<Dish>> list(DishDTO dishDTO) {
+        if (dishDTO.getCategoryId() != null) {
+            log.info("根据分类id查询菜品:{}", dishDTO.getCategoryId());
+        } else {
+            log.info("根据菜品名称模糊查询菜品:{}", dishDTO.getName());
+        }
+        List<Dish> dishList = dishService.list(dishDTO);
         return Result.success(dishList);
     }
 

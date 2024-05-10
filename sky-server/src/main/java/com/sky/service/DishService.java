@@ -48,12 +48,12 @@ public interface DishService {
     void updateWithFlavor(DishDTO dishDTO);
 
     /**
-     * 根据分类id查询菜品
+     * 根据分类id或名称查询菜品
      *
-     * @param categoryId
+     * @param dishDTO
      * @return
      */
-    List<Dish> list(Long categoryId);
+    List<Dish> list(DishDTO dishDTO);
 
     /**
      * 菜品起售停售
