@@ -623,7 +623,7 @@ public class OrderServiceImpl implements OrderService {
         Map map = new HashMap();
         map.put("type", 2);//1表示来电提醒 2表示客户催单
         map.put("orderId", id);
-        map.put("content", "订单号: " + ordersByDB.getId());
+        map.put("content", "订单号: " + ordersByDB.getNumber());
 
         //通过WebSocket实现来单提醒，向客户端浏览器推送消息
         webSocketServer.sendToAllClient(JSON.toJSONString(map));
